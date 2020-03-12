@@ -25,8 +25,8 @@ export default {
       loading: false,
       logoImage: logoImage,
       form: {
-        account: '18888888888',
-        passwd: '12345678'
+        account: '',
+        passwd: ''
       },
       rules: {
         account: [
@@ -49,7 +49,6 @@ export default {
           this.loading = true
           try {
             await login(this.form)
-            console.log('==============')
             this.$router.replace({
               name: 'Curriculum'
             })
