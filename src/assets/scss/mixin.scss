@@ -1,0 +1,29 @@
+@mixin center-layout($type : 'all') {
+  @if $type == 'h' {
+    display: flex;
+    justify-content: center;
+  } @else if $type == 'v' {
+    display: flex;
+    align-items: center;
+  } @else {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@mixin bg-img($url, $size: cover) {
+  background-position: center;
+  background: $url no-repeat center / #{$size};
+}
+
+@mixin maxLine($count) {
+  display: -webkit-box;
+  /*! autoprefixer: off */
+  -webkit-box-orient: vertical;
+  /*! autoprefixer: on */
+  -webkit-line-clamp: $count;
+  overflow: hidden;
+  word-break: break-all;
+  text-overflow: ellipsis;
+}

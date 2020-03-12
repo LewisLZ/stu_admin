@@ -1,0 +1,27 @@
+<template lang="pug">
+  div.bottom-container
+    slot
+</template>
+
+<script>
+</script>
+
+<style lang="scss" scoped>
+  .bottom-container {
+    position: fixed;
+    z-index: 100;
+    right: 0;
+    bottom: 0;
+    height: 70px;
+    left: $side-width;
+    width: 100%;
+    line-height: 70px;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, .03);
+    background: #fff;
+    border-top: 1px solid #e8e8e8;
+    padding: 0 16px;
+    .button {
+      margin-left: 30px;
+    }
+  }
+</style>

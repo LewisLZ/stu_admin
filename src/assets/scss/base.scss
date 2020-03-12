@@ -1,0 +1,133 @@
+@import "./font";
+
+body {
+  margin: 0;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #606266;
+}
+
+.single-line {
+  @include maxLine(1)
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  height: 5px;
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  width: 5px;
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+
+.img-cover {
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
+}
+
+.txt-title {
+  color: $font-color-common;
+  font-size: $font-size-content;
+  line-height: 18px;
+}
+
+.txt-x-title {
+  color: $font-color-common;
+  font-size: $font-size-title-small;
+}
+
+.txt-desc {
+  color: $font-color-secondary;
+  font-size: $font-size-desc;
+  line-height: 14px;
+}
+
+.txt-input {
+  color: $font-color-input;
+}
+
+.txt-head {
+  font-weight: bold;
+  color: #909399;
+  font-size: 14px;
+}
+
+.bottom-outer-content {
+  padding-bottom: 60px;
+}
+
+.txt-decoration {
+  text-decoration: line-through;
+}
+
+.txt-btn {
+  color: $color-primary;
+  cursor: pointer;
+}
+
+.home-price {
+  color: $home-color-price;
+  font-size: $home-size-price;
+  font-family: DIN;
+}
+
+.home-price-small {
+  color: $home-color-price;
+  font-size: $home-size-price-small;
+  font-family: DIN;
+}
+
+.home-title {
+  color: $home-color-title;
+  font-size: $home-size-title;
+  line-height: 20px;
+}
+
+.home-title-small {
+  color: $home-color-title;
+  font-size: $home-size-title-small;
+}
+
+.page-important-hints {
+  color: $color-danger;
+  font-size: $font-size-content;
+}
+
+.el-form-item-search {
+  margin-left: 30px;
+}
+
+.table-box {
+  margin-top: 35px;
+}
+
+.danger-msg {
+  color: #f56c6c;
+}
+
+.approval-title {
+  margin-bottom: 20px;
+  font-weight: bolder;
+  font-size: 16px;
+  height: 60px;
+  line-height: 60px;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-left: 20px;
+  background: #cccccc;
+}
