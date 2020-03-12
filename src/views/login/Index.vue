@@ -36,7 +36,7 @@ export default {
         ],
         passwd: [
           {
-            required: true, trigger: 'blur', message: '请输入登陆密码'
+            required: true, trigger: 'blur', message: '请输入登录密码'
           }
         ]
       }
