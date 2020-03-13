@@ -1,3 +1,8 @@
+export const yearToTmp = (year) => {
+  const t = new Date(`${year}-01-01 00:00:00`)
+  return t.getTime()
+}
+
 export const dateFormat = (date, fmt = 'YYYY-MM-DD HH:mm:ss') => {
   if (date === 0) {
     return '该项数据为0'

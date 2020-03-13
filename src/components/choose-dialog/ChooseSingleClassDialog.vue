@@ -1,20 +1,22 @@
 <template lang="pug">
   el-dialog(:visible.sync="dialogVisible", title="选择班级", width="700px", @close="closeCallback", v-loading="loading")
     div
-      el-table.list-el-table(ref="table", :data="dataList.data", border, default-expand-all)
-        el-table-column(type="expand", width="55")
+      el-table.list-el-table(ref="table", :data="dataList.data", border, :row-class-name="tableRowClassName", @current-change="handleCurrentChange")
+        el-table-column(label="Id")
           template(slot-scope="scope")
-            el-table.list-el-table(ref="table2", :data="scope.row.children", border,  :row-class-name="tableRowClassName", @current-change="handleCurrentChange")
-              el-table-column(label="班级")
-                template(slot-scope="scope2")
-                 div {{scope2.row.name}}
-        el-table-column(label="学年")
+            div {{scope.row.id}}
+        el-table-column(label="班级")
           template(slot-scope="scope")
             div {{scope.row.name}}
+        el-table-column(label="学年")
+          template(slot-scope="scope")
+            div {{showYearName(scope.row)}}
 </template>
 
 <script>
 import { listClass } from '../../api/class'
+import { convertAttrName } from '../../service/common'
+import { allPos } from '../../service/school_year'
 
 export default {
   data () {
@@ -41,6 +43,9 @@ export default {
     },
     hide () {
       this.dialogVisible = false
+    },
+    showYearName (row) {
+      return `${row.year}年-${convertAttrName(row.pos, allPos)}`
     },
     closeCallback () {
       this.$refs.form && this.$refs.form.resetFields()

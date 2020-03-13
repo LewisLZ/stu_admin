@@ -1,13 +1,11 @@
 <template lang="pug">
   div
-    div.warning 有授课教师或者有学生不可删
+    div.warning 学年下有班级数据不可删
     div
       el-form(:inline="true")
-        el-form-item.el-form-item-search
-          el-input(v-model="queryParams.name", placeholder="名称", @keyup.native.enter="search", clearable, style="width: 300px")
-        el-form-item.el-form-item-search(label="学年年份")
+        el-form-item.el-form-item-search(label="年份")
           el-date-picker(v-model="queryParams.year", type="year", placeholder="请选择", value-format="timestamp")
-        el-form-item(label="学年月份")
+        el-form-item(label="月份")
           el-select(v-model="queryParams.pos", placeholder="请选择", clearable)
             el-option(v-for="item in allPos", :key="item.value", :label="item.text", :value="item.value")
         el-form-item.el-form-item-search
@@ -20,50 +18,43 @@
         el-table-column(label="Id", width="55")
           template(slot-scope="scope")
             div {{scope.row.id}}
-        el-table-column(label="班级")
-          template(slot-scope="scope")
-            div {{scope.row.name}}
-        el-table-column(label="学年")
+        el-table-column(label="年份")
           template(slot-scope="scope")
             div {{showYearName(scope.row)}}
-        el-table-column(label="授课教师")
+        el-table-column(label="月份")
           template(slot-scope="scope")
-            el-button(type="text", :disabled="showTeacherCount(scope.row)===0", @click="handleShowTeacher(scope.row)") {{showTeacherCount(scope.row)}}
-        el-table-column(label="学生")
+            div {{showPosName(scope.row)}}
+        el-table-column(label="班级")
           template(slot-scope="scope")
-            el-button(type="text", :disabled="showStudentCount(scope.row)===0", @click="handleShowStudent(scope.row)") {{showStudentCount(scope.row)}}
-        el-table-column(label="操作")
-          template(slot-scope="scope2")
-            el-button(type="primary", plain, size="mini", @click="handleEdit(scope2.row)") 编 辑
-            el-button(type="danger", plain, size="mini", :disabled="disabledClassDelete(scope2.row)" @click="handleDelete(scope2.row)") 删 除
+            el-button(type="text", :disabled="showClassCount(scope.row)===0", @click="handleShowClass(scope.row)") {{showClassCount(scope.row)}}
+        el-table-column
+          template(slot-scope="scope")
+            el-button(type="primary", plain, size="mini", @click="handleEdit(scope.row)") 编 辑
+            el-button(type="danger", plain, size="mini", @click="handleDelete(scope.row)", :disabled="showClassCount(scope.row)>0") 删 除
     div
       el-pagination(:currentPage.sync="queryPager.page", background, layout="prev, pager, next, jumper, sizes, total", :page-sizes="[20, 50, 100, 200]", :pageSize="queryPager.limit", :total="dataListTotal", @current-change="changePage", @size-change="changeSize")
     save-dialog(ref="dlgSave", @callback="handlerSearch")
-    show-teacher-dialog(ref="dlgShowTeacher")
-    show-student-dialog(ref="dlgShowStudent")
+    show-class-dialog(ref="dlgShowClass")
 </template>
 
 <script>
 import LoadPagerData from 'src/mixins/load-pager-data'
 import SaveDialog from './SaveDialog'
-import { deleteClass, listClass } from '../../api/class'
-import ShowTeacherDialog from '../../components/show-dialog/ShowTeacherDialog'
-import ShowStudentDialog from '../../components/show-dialog/ShowStudentDialog'
-import { allPos } from '../../service/school_year'
+import { deleteSchoolYear, listSchoolYear } from '../../api/school_year'
 import { convertAttrName } from '../../service/common'
+import { allPos } from '../../service/school_year'
+import ShowClassDialog from '../../components/show-dialog/ShowClassDialog'
 
 export default {
-  name: 'Class',
+  name: 'SchoolYear',
   mixins: [LoadPagerData],
   components: {
     SaveDialog,
-    ShowTeacherDialog,
-    ShowStudentDialog
+    ShowClassDialog
   },
   data () {
     return {
       queryParams: {
-        name: '',
         year: '',
         pos: 0
       },
@@ -74,42 +65,32 @@ export default {
   },
   methods: {
     getQueryApi (params) {
-      return listClass(params)
+      return listSchoolYear(params)
+    },
+    showClassCount (row) {
+      return row.class.length
+    },
+    showYearName (row) {
+      return `${row.year}年`
+    },
+    showPosName (row) {
+      return convertAttrName(row.pos, allPos)
     },
     handlerSearch () {
       this.queryChange(this.queryParams)
     },
     handlerReset () {
-      this.queryParams = {
-        name: '',
-        year: '',
-        pos: 0
-      }
+      this.queryParams.name = ''
       this.queryChange(this.queryParams)
     },
-    showTeacherCount (row) {
-      return row.teacher.length
-    },
-    showStudentCount (row) {
-      return row.student.length
-    },
-    showYearName (row) {
-      return `${row.year}年-${convertAttrName(row.pos, allPos)}`
-    },
-    disabledClassDelete (row) {
-      return this.showTeacherCount(row) > 0 || this.showStudentCount(row) > 0
+    handleShowClass (row) {
+      this.$refs.dlgShowClass && this.$refs.dlgShowClass.show(row.class)
     },
     handleAdd () {
       this.$refs.dlgSave && this.$refs.dlgSave.show()
     },
     handleEdit (row) {
-      this.$refs.dlgSave && this.$refs.dlgSave.show({ id: row.id, name: row.name, school_year_id: row.school_year_id })
-    },
-    handleShowTeacher (row) {
-      this.$refs.dlgShowTeacher && this.$refs.dlgShowTeacher.show(row.teacher)
-    },
-    handleShowStudent (row) {
-      this.$refs.dlgShowStudent && this.$refs.dlgShowStudent.show(row.student)
+      this.$refs.dlgSave && this.$refs.dlgSave.show({ id: row.id, year: row.year_tmp, pos: row.pos })
     },
     handleDelete (row) {
       this.$confirm('确定删除吗？', '提示', {
@@ -117,7 +98,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        await deleteClass({ id: row.id })
+        await deleteSchoolYear({ id: row.id })
         this.$message({
           type: 'success',
           message: '删除成功!'

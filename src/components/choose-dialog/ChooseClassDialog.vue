@@ -3,15 +3,12 @@
     div
       el-checkbox-group(v-model="selectedIds")
         el-table.list-el-table(ref="table", :data="dataList.data", border, default-expand-all)
-          el-table-column(type="expand", width="55")
+          el-table-column(label="班级")
             template(slot-scope="scope")
-              el-table.list-el-table(ref="table2", :data="scope.row.children", border)
-                el-table-column(label="班级")
-                  template(slot-scope="scope2")
-                    el-checkbox(:label="scope2.row.id") {{scope2.row.name}}
+              el-checkbox(:label="scope.row.id") {{scope.row.name}}
           el-table-column(label="学年")
             template(slot-scope="scope")
-              div {{scope.row.name}}
+              div {{showYearName(scope.row)}}
 
     div.dialog-footer(slot="footer")
       el-button(type="primary", @click="handleSubmit") 确定
@@ -20,6 +17,8 @@
 
 <script>
 import { listClass } from '../../api/class'
+import { convertAttrName } from '../../service/common'
+import { allPos } from '../../service/school_year'
 
 export default {
   data () {
@@ -35,7 +34,7 @@ export default {
   methods: {
     async initData () {
       this.loading = true
-      const res = await listClass()
+      const res = await listClass({ page: 1, limit: 10000 })
       this.dataList = res.data
       this.loading = false
     },
@@ -46,6 +45,9 @@ export default {
     },
     hide () {
       this.dialogVisible = false
+    },
+    showYearName (row) {
+      return `${row.year}年-${convertAttrName(row.pos, allPos)}`
     },
     closeCallback () {
       this.$refs.form && this.$refs.form.resetFields()

@@ -3,22 +3,20 @@
      el-form.bottom-outer-content(ref="form", :model="formData", :rules="formRules", labelWidth="150px")
        el-form-item(label="姓名：", prop="name")
          el-input.medium-el-input(v-model="formData.name")
-       el-form-item(label="学号：", v-if="isEdit")
-         el-input.medium-el-input(v-model="formData.code", :disabled="isEdit")
        el-form-item(label="性别：", prop="sex", :required="true")
          el-radio-group(v-model="formData.sex")
            el-radio(:label="1") 男
            el-radio(:label="2") 女
-       el-form-item(label="电话：", prop="mobile", :required="true")
+       el-form-item(label="电话：", prop="mobile")
          el-input.medium-el-input(v-model="formData.mobile")
        el-form-item(label="出生日期：", prop="birthday")
          el-date-picker(v-model="formData.birthday", placeholder="选择日期", valueFormat="yyyy-MM-dd", format="yyyy 年 MM 月 dd 日")
        el-form-item(label="入学时间：", prop="intake_time")
-         el-date-picker(v-model="formData.intake_time", placeholder="选择日期", valueFormat="yyyy-MM", format="yyyy 年 MM 月", :disabled="isEdit")
+         el-date-picker(v-model="formData.intake_time", placeholder="选择日期", valueFormat="yyyy-MM", format="yyyy 年 MM 月")
        el-form-item(label="地址：", prop="address")
          el-input.medium-el-input(v-model="formData.address")
        el-form-item(label="班级：", prop="class_id")
-         el-button.button(type="primary", size="mini", plain, @click="handleAddClass", v-if="!isEdit") 选 择
+         el-button.button(type="primary", size="mini", plain, @click="handleAddClass") 选 择
          div {{formData.class_name}}
      bottom-container
        el-button.button(type="primary", :loading="loading", @click="handleSave") 保 存
@@ -32,7 +30,7 @@ import { listClassNameByIds } from '../../api/class'
 import { createStudent, getStudent, updateStudent } from '../../api/student'
 
 export default {
-  name: 'Form',
+  name: 'Edit',
   components: {
     ChooseSingleClassDialog
   },

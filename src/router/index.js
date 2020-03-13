@@ -7,38 +7,8 @@ Vue.use(Router)
 
 const homeGroups = [
   {
-    name: 'SupplierManagement',
-    title: '供应商管理',
-    path: '/'
-  },
-  {
-    name: 'ProductManagement',
-    title: '货品管理',
-    path: '/'
-  },
-  {
-    name: 'SystemSettings',
-    title: '系统设置',
-    path: '/'
-  },
-  {
-    name: 'SystemDocking',
-    title: '系统对接',
-    path: '/'
-  },
-  {
-    name: 'BusManagement',
-    title: '商务条件管理',
-    path: '/'
-  },
-  {
-    name: 'DataAnalysis',
-    title: '数据分析',
-    path: '/'
-  },
-  {
-    name: 'IncomeExpenditureAnalysis',
-    title: '收支分析',
+    name: 'ClassManagement',
+    title: '班级管理',
     path: '/'
   }
 ]
@@ -72,12 +42,41 @@ const router = new Router({
           }
         },
         {
-          path: '/class',
+          path: 'schoolyear',
+          name: 'SchoolYear',
+          component: () => import('src/views/school_year/Index.vue'),
+          meta: {
+            group: 'ClassManagement',
+            title: '学年',
+            showInSide: true
+          }
+        },
+        {
+          path: 'class',
           name: 'Class',
           component: () => import('src/views/class/Index.vue'),
           meta: {
-            title: '班级管理',
+            group: 'ClassManagement',
+            title: '班级',
             showInSide: true
+          }
+        },
+        {
+          path: '/class/edit/:id',
+          name: 'ClassEdit',
+          component: () => import('src/views/class/Edit.vue'),
+          meta: {
+            title: '编辑',
+            showInSide: false,
+            breadcrumbItems: [
+              {
+                text: '班级',
+                to: { name: 'Class' }
+              },
+              {
+                text: '编辑'
+              }
+            ]
           }
         },
         {
