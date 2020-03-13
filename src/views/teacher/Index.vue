@@ -6,6 +6,9 @@
           el-input(v-model="queryParams.name", placeholder="姓名", @keyup.native.enter="search", clearable, style="width: 300px")
         el-form-item.el-form-item-search
           el-input(v-model="queryParams.mobile", placeholder="电话", @keyup.native.enter="search", clearable, style="width: 300px")
+        el-form-item(prop="depart", label="部门")
+          el-select(v-model="queryParams.sex", placeholder="请选择", clearable)
+            el-option(v-for="item in allSex", :key="item.value", :label="item.text", :value="item.value")
         el-form-item.el-form-item-search
           el-button(type="primary", icon="el-icon-search", @click="handlerSearch") 查 询
           el-button(@click="handlerReset") 重 置
@@ -19,6 +22,9 @@
         el-table-column(label="姓名")
           template(slot-scope="scope")
             div {{scope.row.name}}
+        el-table-column(label="性别")
+          template(slot-scope="scope")
+            div {{convertAttrName(scope.row.sex, allSex)}}
         el-table-column(label="电话")
           template(slot-scope="scope")
             div {{scope.row.mobile}}
@@ -40,6 +46,8 @@
 <script>
 import LoadPagerData from 'src/mixins/load-pager-data'
 import { deleteTeacher, listTeacher } from '../../api/teacher'
+import { allSex } from '../../service/teacher'
+import { convertAttrName } from '../../service/common'
 
 export default {
   mixins: [LoadPagerData],
@@ -47,8 +55,12 @@ export default {
     return {
       queryParams: {
         name: '',
-        mobile: ''
-      }
+        mobile: '',
+        sex: 0
+      },
+      ...$global.$mapConst({
+        'allSex': allSex
+      })
     }
   },
   methods: {
@@ -95,7 +107,10 @@ export default {
         })
         this.queryChange(this.queryParams)
       })
-    }
+    },
+    ...$global.$mapMethods({
+      'convertAttrName': convertAttrName
+    })
   }
 }
 </script>

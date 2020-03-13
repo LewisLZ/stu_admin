@@ -133,6 +133,42 @@ const router = new Router({
             title: '学生管理',
             showInSide: true
           }
+        },
+        {
+          path: '/student/create',
+          name: 'StudentCreate',
+          component: () => import('src/views/student/Create.vue'),
+          meta: {
+            title: '新增',
+            showInSide: false,
+            breadcrumbItems: [
+              {
+                text: '学生管理',
+                to: { name: 'Student' }
+              },
+              {
+                text: '新增'
+              }
+            ]
+          }
+        },
+        {
+          path: '/student/edit/:id',
+          name: 'StudentEdit',
+          component: () => import('src/views/student/Edit.vue'),
+          meta: {
+            title: '编辑',
+            showInSide: false,
+            breadcrumbItems: [
+              {
+                text: '学生管理',
+                to: { name: 'Student' }
+              },
+              {
+                text: '编辑'
+              }
+            ]
+          }
         }
       ]
     },
