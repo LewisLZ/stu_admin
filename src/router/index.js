@@ -62,8 +62,8 @@ const router = new Router({
           }
         },
         {
-          path: '/class/edit/:id',
-          name: 'ClassEdit',
+          path: '/class/curriculum/:id',
+          name: 'ClassCurriculumEdit',
           component: () => import('src/views/class/Edit.vue'),
           meta: {
             title: '编辑',

@@ -16,7 +16,7 @@
     div
       el-button(type="primary", @click="handleAdd") 添 加
     div
-      el-table.list-el-table(ref="table", :data="dataList.data", border, default-expand-all)
+      el-table.list-el-table(ref="table", :data="dataList.data", border)
         el-table-column(label="Id", width="55")
           template(slot-scope="scope")
             div {{scope.row.id}}
@@ -32,10 +32,14 @@
         el-table-column(label="学生")
           template(slot-scope="scope")
             el-button(type="text", :disabled="showStudentCount(scope.row)===0", @click="handleShowStudent(scope.row)") {{showStudentCount(scope.row)}}
-        el-table-column(label="操作")
-          template(slot-scope="scope2")
-            el-button(type="primary", plain, size="mini", @click="handleEdit(scope2.row)") 编 辑
-            el-button(type="danger", plain, size="mini", :disabled="disabledClassDelete(scope2.row)" @click="handleDelete(scope2.row)") 删 除
+        el-table-column(label="课程")
+          template(slot-scope="scope")
+            el-button(type="text", :disabled="showStudentCount(scope.row)===0", @click="handleShowStudent(scope.row)") {{showStudentCount(scope.row)}}
+        el-table-column(label="操作", width="300")
+          template(slot-scope="scope")
+            el-button(type="primary", plain, size="mini", @click="handleEdit(scope.row)") 编 辑
+            el-button(type="primary", plain, size="mini", @click="handleCurriculumEdit(scope.row)") 编辑课程
+            el-button(type="danger", plain, size="mini", :disabled="disabledClassDelete(scope.row)" @click="handleDelete(scope.row)") 删 除
     div
       el-pagination(:currentPage.sync="queryPager.page", background, layout="prev, pager, next, jumper, sizes, total", :page-sizes="[20, 50, 100, 200]", :pageSize="queryPager.limit", :total="dataListTotal", @current-change="changePage", @size-change="changeSize")
     save-dialog(ref="dlgSave", @callback="handlerSearch")
@@ -104,6 +108,14 @@ export default {
     },
     handleEdit (row) {
       this.$refs.dlgSave && this.$refs.dlgSave.show({ id: row.id, name: row.name, school_year_id: row.school_year_id })
+    },
+    handleCurriculumEdit (row) {
+      this.$router.push({
+        name: 'ClassCurriculumEdit',
+        params: {
+          id: row.id
+        }
+      })
     },
     handleShowTeacher (row) {
       this.$refs.dlgShowTeacher && this.$refs.dlgShowTeacher.show(row.teacher)
