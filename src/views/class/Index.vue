@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    div.warning 有二级数据一级数据不可删，有授课教师二级数据不可删
+    div.warning 有二级数据一级数据不可删，有授课教师或者有学生二级数据不可删
     div
       el-button(type="primary", @click="handleAdd") 添 加
     div
@@ -20,10 +20,13 @@
               el-table-column(label="授课教师")
                 template(slot-scope="scope2")
                   el-button(type="text", :disabled="showTeacherCount(scope2.row)===0", @click="handleShowTeacher(scope2.row)") {{showTeacherCount(scope2.row)}}
+              el-table-column(label="学生")
+                template(slot-scope="scope2")
+                  el-button(type="text", :disabled="showStudentCount(scope2.row)===0", @click="handleShowStudent(scope2.row)") {{showStudentCount(scope2.row)}}
               el-table-column
                 template(slot-scope="scope2")
                   el-button(type="primary", plain, size="mini", @click="handleEdit(scope2.row)") 编 辑
-                  el-button(type="danger", plain, size="mini", :disabled="showTeacherCount(scope2.row)" @click="handleDelete(scope2.row)") 删 除
+                  el-button(type="danger", plain, size="mini", :disabled="disabledClassDelete(scope2.row)" @click="handleDelete(scope2.row)") 删 除
         el-table-column(label="学年名称")
           template(slot-scope="scope")
             div {{scope.row.name}}
@@ -34,18 +37,21 @@
             el-button(type="danger", plain, size="mini", @click="handleDelete(scope.row)", :disabled="scope.row.children.length>0") 删 除
     save-dialog(ref="dlgSave", @callback="initData")
     show-teacher-dialog(ref="dlgShowTeacher")
+    show-student-dialog(ref="dlgShowStudent")
 </template>
 
 <script>
 import SaveDialog from './SaveDialog'
 import { deleteClass, listClass } from '../../api/class'
 import ShowTeacherDialog from '../../components/show-dialog/ShowTeacherDialog'
+import ShowStudentDialog from '../../components/show-dialog/ShowStudentDialog'
 
 export default {
   name: 'Class',
   components: {
     SaveDialog,
-    ShowTeacherDialog
+    ShowTeacherDialog,
+    ShowStudentDialog
   },
   data () {
     return {
@@ -62,6 +68,12 @@ export default {
     showTeacherCount (row) {
       return row.teacher.length
     },
+    showStudentCount (row) {
+      return row.student.length
+    },
+    disabledClassDelete (row) {
+      return this.showTeacherCount(row) > 0 || this.showStudentCount(row) > 0
+    },
     handleAdd () {
       this.$refs.dlgSave && this.$refs.dlgSave.show()
     },
@@ -73,6 +85,9 @@ export default {
     },
     handleShowTeacher (row) {
       this.$refs.dlgShowTeacher && this.$refs.dlgShowTeacher.show(row.teacher)
+    },
+    handleShowStudent (row) {
+      this.$refs.dlgShowStudent && this.$refs.dlgShowStudent.show(row.student)
     },
     handleDelete (row) {
       this.$confirm('确定删除吗？', '提示', {
