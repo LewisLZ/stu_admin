@@ -14,7 +14,7 @@
               el-table-column(label="Id", width="55")
                 template(slot-scope="scope2")
                   div {{scope2.row.id}}
-              el-table-column(label="Name")
+              el-table-column(label="班级名称")
                 template(slot-scope="scope2")
                   div {{scope2.row.name}}
               el-table-column(label="授课教师")
@@ -24,14 +24,14 @@
                 template(slot-scope="scope2")
                   el-button(type="primary", plain, size="mini", @click="handleEdit(scope2.row)") 编 辑
                   el-button(type="danger", plain, size="mini", :disabled="showTeacherCount(scope2.row)" @click="handleDelete(scope2.row)") 删 除
-        el-table-column(label="Name")
+        el-table-column(label="学年名称")
           template(slot-scope="scope")
             div {{scope.row.name}}
         el-table-column
           template(slot-scope="scope")
             el-button(type="primary", plain, size="mini", @click="handleCreate(scope.row)") 添 加
             el-button(type="primary", plain, size="mini", @click="handleEdit(scope.row)") 编 辑
-            el-button(type="danger", plain, size="mini", @click="handleDelete(scope.row)", :disabled="scope.row.children") 删 除
+            el-button(type="danger", plain, size="mini", @click="handleDelete(scope.row)", :disabled="scope.row.children.length>0") 删 除
     save-dialog(ref="dlgSave", @callback="initData")
     show-teacher-dialog(ref="dlgShowTeacher")
 </template>

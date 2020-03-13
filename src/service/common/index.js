@@ -1,4 +1,17 @@
-
+export const allSex = {
+  all: {
+    value: 0,
+    text: '全部'
+  },
+  boy: {
+    value: 1,
+    text: '男'
+  },
+  girl: {
+    value: 2,
+    text: '女'
+  }
+}
 /*
  * 根据类型值返回对应名称
  * @param {number} val 对象中某个属性的 'value' 值

@@ -1,12 +1,12 @@
 <template lang="pug">
   div
-    div.search
+    div
       el-form(:inline="true")
         el-form-item.el-form-item-search
           el-input(v-model="queryParams.name", placeholder="姓名", @keyup.native.enter="search", clearable, style="width: 300px")
         el-form-item.el-form-item-search
           el-input(v-model="queryParams.mobile", placeholder="电话", @keyup.native.enter="search", clearable, style="width: 300px")
-        el-form-item(prop="depart", label="部门")
+        el-form-item(prop="depart", label="性别")
           el-select(v-model="queryParams.sex", placeholder="请选择", clearable)
             el-option(v-for="item in allSex", :key="item.value", :label="item.text", :value="item.value")
         el-form-item.el-form-item-search
@@ -46,8 +46,7 @@
 <script>
 import LoadPagerData from 'src/mixins/load-pager-data'
 import { deleteTeacher, listTeacher } from '../../api/teacher'
-import { allSex } from '../../service/teacher'
-import { convertAttrName } from '../../service/common'
+import { allSex, convertAttrName } from '../../service/common'
 
 export default {
   mixins: [LoadPagerData],
@@ -82,8 +81,11 @@ export default {
       this.queryChange(this.queryParams)
     },
     handlerReset () {
-      this.queryParams.name = ''
-      this.queryParams.mobile = ''
+      this.queryParams = {
+        name: '',
+        mobile: '',
+        sex: 0
+      }
       this.queryChange(this.queryParams)
     },
     handleEdit (row) {

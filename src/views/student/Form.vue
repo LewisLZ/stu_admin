@@ -7,33 +7,32 @@
          el-radio-group(v-model="formData.sex")
            el-radio(:label="1") 男
            el-radio(:label="2") 女
-       el-form-item(label="电话：", prop="mobile", :required="true")
+       el-form-item(label="电话：", prop="mobile")
          el-input.medium-el-input(v-model="formData.mobile")
-       el-form-item(label="课程：", prop="curriculum_ids", :required="true")
-         el-button.button(type="primary", size="mini", plain, @click="handleAddCurriculum") 选 择
-         div {{curriculumNames}}
-       el-form-item(label="班级：", prop="class_ids")
+       el-form-item(label="出生日期：", prop="birthday")
+         el-date-picker(v-model="formData.birthday", placeholder="选择日期", valueFormat="yyyy-MM-dd", format="yyyy 年 MM 月 dd 日")
+       el-form-item(label="入学时间：", prop="intake_time")
+         el-date-picker(v-model="formData.intake_time", placeholder="选择日期", valueFormat="yyyy-MM", format="yyyy 年 MM 月")
+       el-form-item(label="地址：", prop="address")
+         el-input.medium-el-input(v-model="formData.address")
+       el-form-item(label="班级：", prop="class_id")
          el-button.button(type="primary", size="mini", plain, @click="handleAddClass") 选 择
-         div {{classNames}}
+         div {{formData.class_name}}
      bottom-container
        el-button.button(type="primary", :loading="loading", @click="handleSave") 保 存
        el-button.button(@click="$router.back()") 取 消
-     choose-class-dialog(ref="dlgChooseClass", @submit="handleChooseClass")
-     choose-curriculum-dialog(ref="dlgChooseCurriculum", @submit="handleChooseCurriculum")
+     choose-single-class-dialog(ref="dlgChooseClass", @submit="handleChooseClass")
 </template>
 
 <script>
-import { listCurriculumNameByIds } from '../../api/curriculum'
-import { createTeacher, getTeacher, updateTeacher } from '../../api/teacher'
-import ChooseClassDialog from '../../components/choose-dialog/ChooseClassDialog'
-import ChooseCurriculumDialog from '../../components/choose-dialog/ChooseCurriculumDialog'
+import ChooseSingleClassDialog from '../../components/choose-dialog/ChooseSingleClassDialog'
 import { listClassNameByIds } from '../../api/class'
+import { createStudent, getStudent, updateStudent } from '../../api/student'
 
 export default {
   name: 'Form',
   components: {
-    ChooseClassDialog,
-    ChooseCurriculumDialog
+    ChooseSingleClassDialog
   },
   data () {
     const mobileValidator = (rule, value, callback) => {
@@ -55,8 +54,11 @@ export default {
         name: '',
         sex: 1,
         mobile: '',
-        curriculum_ids: [],
-        class_ids: []
+        birthday: '',
+        intake_time: '',
+        address: '',
+        class_id: 0,
+        class_name: ''
       },
       formRules: {
         name: [
@@ -65,15 +67,19 @@ export default {
         mobile: [
           { validator: mobileValidator, trigger: 'blur' }
         ],
-        curriculum_ids: [
-          { required: true, message: '请选择课程', trigger: 'blur' }
+        birthday: [
+          { required: true, message: '出生日期不能为空', trigger: 'blur' }
         ],
-        class_ids: [
+        intake_time: [
+          { required: true, message: '入学时间不能为空', trigger: 'blur' }
+        ],
+        address: [
+          { required: true, message: '地址不能为空', trigger: 'blur' }
+        ],
+        class_id: [
           { required: true, message: '请选择班级', trigger: 'blur' }
         ]
-      },
-      curriculumNames: '',
-      classNames: ''
+      }
     }
   },
   computed: {
@@ -87,27 +93,17 @@ export default {
   methods: {
     async initData () {
       if (this.$route.params.id) {
-        const res = await getTeacher({ id: this.$route.params.id })
+        const res = await getStudent({ id: this.$route.params.id })
         this.formData = res.data
-        this.curriculumNames = this.R.map(item => item.name)(res.data.curriculum || []).join('，')
-        this.classNames = this.R.map(item => item.name)(res.data.class || []).join('，')
       }
     },
-    handleAddCurriculum () {
-      this.$refs.dlgChooseCurriculum && this.$refs.dlgChooseCurriculum.show(this.formData.curriculum_ids)
-    },
     handleAddClass () {
-      this.$refs.dlgChooseClass && this.$refs.dlgChooseClass.show(this.formData.class_ids)
+      this.$refs.dlgChooseClass && this.$refs.dlgChooseClass.show(this.formData.class_id)
     },
-    async handleChooseCurriculum (ids) {
-      this.formData.curriculum_ids = ids
-      const res = await listCurriculumNameByIds(ids)
-      this.curriculumNames = res.data.data.join('，')
-    },
-    async handleChooseClass (ids) {
-      this.formData.class_ids = ids
-      const res = await listClassNameByIds(ids)
-      this.classNames = res.data.data.join('，')
+    async handleChooseClass (id) {
+      this.formData.class_id = id
+      const res = await listClassNameByIds([id])
+      this.formData.class_name = res.data.data.join('，')
     },
     handleSave () {
       this.$refs.form.validate(async (valid) => {
@@ -115,17 +111,17 @@ export default {
           this.loading = true
           try {
             if (this.isEdit) {
-              await updateTeacher(this.$route.params.id, this.formData)
+              await updateStudent(this.$route.params.id, this.formData)
             } else {
-              await createTeacher(this.formData)
+              await createStudent(this.formData)
             }
             this.$message({
               type: 'success',
               message: '保存成功'
             })
+            this.$router.back()
           } finally {
             this.loading = false
-            this.$router.back()
           }
         }
       })

@@ -1,15 +1,19 @@
 import Axios from 'axios'
+import { covertStudentForm } from '../service/student'
 
-export const createStudent = (params) => {
+export const createStudent = (data) => {
+  const params = covertStudentForm(data)
   return Axios.post('/sys/student/create', params)
 }
 
-export const updateStudent = (id, params) => {
+export const updateStudent = (id, data) => {
+  const params = covertStudentForm(data)
   params.id = id
   return Axios.post('/sys/student/update', params)
 }
 
-export const listStudent = (params) => {
+export const listStudent = (data) => {
+  const params = covertStudentForm(data)
   return Axios.get('/sys/student/list', { params })
 }
 

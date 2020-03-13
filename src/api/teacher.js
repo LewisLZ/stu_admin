@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import { covertListForm } from '../service/teacher'
+import { covertListTeacherForm } from '../service/teacher'
 
 export const createTeacher = (params) => {
   return Axios.post('/sys/teacher/create', params)
@@ -11,7 +11,7 @@ export const updateTeacher = (id, params) => {
 }
 
 export const listTeacher = (data) => {
-  const params = covertListForm(data)
+  const params = covertListTeacherForm(data)
   return Axios.get('/sys/teacher/list', { params })
 }
 
