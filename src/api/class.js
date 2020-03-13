@@ -1,6 +1,6 @@
 import Axios from 'axios'
 import { covertSchoolYearForm } from '../service/school_year'
-import { covertClassCurriculumData, covertClassData } from '../service/class'
+import { covertClassCurriculumForm, covertClassCurriculumYearForm, covertClassData } from '../service/class'
 
 export const createClass = (data) => {
   const params = covertClassData(data)
@@ -35,15 +35,20 @@ export const listClassCurriculumYear = (params) => {
 }
 
 export const createClassCurriculumYear = (data) => {
-  const params = covertClassCurriculumData(data)
+  const params = covertClassCurriculumYearForm(data)
   return Axios.post('/sys/classcurriculum/year/create', params)
 }
 
 export const updateClassCurriculumYear = (data) => {
-  const params = covertClassCurriculumData(data)
+  const params = covertClassCurriculumYearForm(data)
   return Axios.post('/sys/classcurriculum/year/update', params)
 }
 
 export const deleteClassCurriculumYear = (params) => {
   return Axios.delete('/sys/classcurriculum/year/delete', { params })
+}
+
+export const createClassCurriculum = (data) => {
+  const params = covertClassCurriculumForm(data)
+  return Axios.post('/sys/classcurriculum/create', params)
 }

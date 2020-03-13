@@ -6,7 +6,7 @@
        el-table.list-el-table(ref="table", :data="dataList.data", border)
          el-table-column(type="expand")
            template(slot-scope="scope")
-             edit-info(:data="scope.row")
+             edit-info(:curriculumNames="getCurriculumNames(scope.row)", :curriculumIds="getCurriculumIds(scope.row)", :ccYearId="scope.row.id", @submit="initData")
          el-table-column(label="")
            template(slot-scope="scope")
              div {{scope.row.class_name}}
@@ -43,6 +43,12 @@ export default {
       this.dataList = res.data
       const classRes = await getClass({ id: this.$route.params.id })
       this.classInfo = classRes.data
+    },
+    getCurriculumIds (row) {
+      return this.R.map(item => item.curriculum_id)(row.class_curriculum || [])
+    },
+    getCurriculumNames (row) {
+      return this.R.map(item => item.curriculum_name)(row.class_curriculum || [])
     },
     disabledClassDelete (row) {
       if (!row.class_curriculum) {

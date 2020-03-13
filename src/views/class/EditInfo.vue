@@ -1,11 +1,14 @@
 <template lang="pug">
   div
-    el-form.bottom-outer-content(ref="form", :model="formData", :rules="formRules", labelWidth="150px")
-      el-form-item(label="课程：", prop="class_id")
+    el-form(ref="form", :model="formData", :rules="formRules", labelWidth="150px")
+      el-form-item(label="课程：", prop="curriculum_ids")
         el-button.button(type="primary", size="mini", plain, @click="handleAddCurriculum") 选 择
-        div {{curriculumNames}}
-    el-button.button(type="primary", :loading="loading", @click="handleSave") 保 存
-    el-button.button(@click="$router.back()") 取 消
+        el-table.table(:data="dataCurriculumNames", border, :show-header="false")
+          el-table-column
+            template(slot-scope="scope")
+              div {{scope.row}}
+      el-form-item
+        el-button(type="primary", :loading="loading", @click="handleSave") 保 存
     choose-curriculum-dialog(ref="dlgChooseCurriculum", @submit="handleChooseCurriculum")
 </template>
 
@@ -13,7 +16,7 @@
 
 import ChooseCurriculumDialog from '../../components/choose-dialog/ChooseCurriculumDialog'
 import { listCurriculumNameByIds } from '../../api/curriculum'
-import { createStudent, updateStudent } from '../../api/student'
+import { createClassCurriculum } from '../../api/class'
 
 export default {
   name: 'EditInfo',
@@ -21,15 +24,34 @@ export default {
     ChooseCurriculumDialog
   },
   props: {
-    data: {
-      curriculum_ids: []
+    curriculumIds: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    curriculumNames: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    ccYearId: {
+      type: Number,
+      default: 0
     }
   },
   watch: {
-    'data': {
+    'curriculumIds': {
       handler (val, old) {
-        console.log('====', val, old)
-        this.formData.curriculum_ids = this.R.clone(val.curriculum_ids)
+        this.formData.curriculum_ids = this.R.clone(val || [])
+      },
+      deep: true,
+      immediate: true
+    },
+    'curriculumNames': {
+      handler (val, old) {
+        this.dataCurriculumNames = this.R.clone(val || [])
       },
       deep: true,
       immediate: true
@@ -37,38 +59,38 @@ export default {
   },
   data () {
     return {
+      loading: false,
       formData: {
         curriculum_ids: []
       },
-      curriculumNames: []
+      formRules: {
+        curriculum_ids: [
+          { required: true, message: '课程不能为空', trigger: 'blur' }
+        ]
+      },
+      dataCurriculumNames: []
     }
   },
   methods: {
     handleAddCurriculum () {
-      this.$refs.dlgChooseCurriculum && this.$refs.dlgChooseCurriculum.show(this.formData.curriculum_ids)
+      this.$refs.dlgChooseCurriculum && this.$refs.dlgChooseCurriculum.show(this.formData.curriculum_ids || [])
     },
     async handleChooseCurriculum (ids) {
       this.formData.curriculum_ids = ids
       const res = await listCurriculumNameByIds(ids)
-      this.curriculumNames = res.data.data.join('，')
-
-      this.$emit('update:data', this.formData)
+      this.dataCurriculumNames = res.data.data
     },
     handleSave () {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
           this.loading = true
           try {
-            if (this.isEdit) {
-              await updateStudent(this.$route.params.id, this.formData)
-            } else {
-              await createStudent(this.formData)
-            }
+            await createClassCurriculum({ cc_year_id: this.ccYearId, curriculum_ids: this.formData.curriculum_ids })
             this.$message({
               type: 'success',
               message: '保存成功'
             })
-            this.$router.back()
+            this.$emit('submit')
           } finally {
             this.loading = false
           }
@@ -80,5 +102,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .table {
+    margin-top: 15px;
+  }
 </style>

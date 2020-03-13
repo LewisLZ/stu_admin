@@ -25,7 +25,7 @@
           template(slot-scope="scope")
             div
               el-button(type="primary", plain, size="mini", @click="handleEdit(scope.row)") 编 辑
-              el-button(type="danger", plain, size="mini", @click="handleDelete(scope.row)", :disabled="showTeacherCount(scope.row)") 删 除
+              el-button(type="danger", plain, size="mini", @click="handleDelete(scope.row)", :disabled="showTeacherCount(scope.row) > 0") 删 除
     div
       el-pagination(:currentPage.sync="queryPager.page", background, layout="prev, pager, next, jumper, sizes, total", :page-sizes="[20, 50, 100, 200]", :pageSize="queryPager.limit", :total="dataListTotal", @current-change="changePage", @size-change="changeSize")
     save-dialog(ref="dlgSave", @callback="handlerSearch")

@@ -13,7 +13,7 @@ export const covertClassData = R.curry((data) => {
   })(data)
 })
 
-export const covertClassCurriculumData = R.curry((data) => {
+export const covertClassCurriculumYearForm = R.curry((data) => {
   return R.mapObjIndexed((val, key) => {
     if (key === 'pos' || key === 'class_id') {
       if (val === '') {
@@ -26,6 +26,18 @@ export const covertClassCurriculumData = R.curry((data) => {
         return ''
       }
       return dateFormat(val, 'YYYY')
+    }
+    return val
+  })(data)
+})
+
+export const covertClassCurriculumForm = R.curry((data) => {
+  return R.mapObjIndexed((val, key) => {
+    if (key === 'cc_year_id') {
+      if (val === '') {
+        return 0
+      }
+      return parseInt(val)
     }
     return val
   })(data)

@@ -32,9 +32,6 @@
         el-table-column(label="学生")
           template(slot-scope="scope")
             el-button(type="text", :disabled="showStudentCount(scope.row)===0", @click="handleShowStudent(scope.row)") {{showStudentCount(scope.row)}}
-        el-table-column(label="课程")
-          template(slot-scope="scope")
-            el-button(type="text", :disabled="showStudentCount(scope.row)===0", @click="handleShowStudent(scope.row)") {{showStudentCount(scope.row)}}
         el-table-column(label="操作", width="300")
           template(slot-scope="scope")
             el-button(type="primary", plain, size="mini", @click="handleEdit(scope.row)") 编 辑
