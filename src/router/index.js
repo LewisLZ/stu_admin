@@ -168,6 +168,15 @@ const router = new Router({
               }
             ]
           }
+        },
+        {
+          path: '/examination',
+          name: 'Examination',
+          component: () => import('src/views/examination/Index.vue'),
+          meta: {
+            title: '考试管理',
+            showInSide: true
+          }
         }
       ]
     },

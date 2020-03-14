@@ -22,10 +22,11 @@ export const covertClassCurriculumYearForm = R.curry((data) => {
       return parseInt(val)
     }
     if (key === 'year') {
-      if (val === '') {
+      const v = parseInt(val)
+      if (v === 0) {
         return ''
       }
-      return dateFormat(val, 'YYYY')
+      return dateFormat(v, 'YYYY')
     }
     return val
   })(data)

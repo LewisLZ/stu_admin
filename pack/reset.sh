@@ -4,6 +4,7 @@ if [ -f "reset.sh" ] && [ -f "dist.tar.gz" ]; then
   echo "ssh 移除原文件"
   rm -r ./static
   rm index.html
+  rm favicon.ico
 
   echo "ssh 开始解压"
 
