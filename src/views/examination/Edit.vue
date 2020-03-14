@@ -1,12 +1,12 @@
 <template lang="pug">
    div
      div
-       el-button(type="primary", @click="handleAddClass") 添加班级
+       el-button(type="primary", @click="handleAddClass", :disabled="!dataList.can_edit") 添加班级
      div(v-if="dataList.data.length > 0")
        el-table.list-el-table(ref="table", :data="dataList.data", border)
          el-table-column(type="expand")
            template(slot-scope="scope")
-             edit-info(:curriculumNames="getCurriculumNames(scope.row)", :curriculumIds="getCurriculumIds(scope.row)", :classId="scope.row.class_id", :examinationClassId="scope.row.id", @submit="initData")
+             edit-info(:curriculumNames="getCurriculumNames(scope.row)", :curriculumIds="getCurriculumIds(scope.row)", :classId="scope.row.class_id", :examinationClassId="scope.row.id", :canEdit="dataList.can_edit" @submit="initData")
          el-table-column(label="Id")
            template(slot-scope="scope")
              div {{scope.row.id}}
@@ -39,7 +39,8 @@ export default {
       loading: false,
       dialogVisible: false,
       dataList: {
-        data: []
+        data: [],
+        can_edit: true
       },
       classInfo: {}
     }

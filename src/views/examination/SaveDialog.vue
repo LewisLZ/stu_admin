@@ -18,6 +18,13 @@ import { createExamination, updateExamination } from '../../api/examination'
 
 export default {
   data () {
+    const timeValidator = (rule, value, callback) => {
+      if (value <= new Date().getTime()) {
+        callback(new Error('考试时间不能小于或等于当前时间'))
+        return
+      }
+      callback()
+    }
     return {
       loading: false,
       dialogVisible: false,
@@ -32,7 +39,8 @@ export default {
           { required: true, message: '姓名不能为空', trigger: 'blur' }
         ],
         start_time: [
-          { required: true, message: '考试时间不能为空', trigger: 'blur' }
+          { required: true, message: '考试时间不能为空', trigger: 'blur' },
+          { validator: timeValidator, trigger: 'blur' }
         ]
       }
     }
@@ -43,9 +51,9 @@ export default {
     },
     showTitle () {
       if (this.isEdit) {
-        return '编辑课程'
+        return '编辑考试'
       }
-      return '创建课程'
+      return '创建考试'
     }
   },
   methods: {

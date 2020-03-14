@@ -1,5 +1,6 @@
 <template lang="pug">
   div
+    div.warning 有考试班级不可删除，开始考试不可编辑
     div
       el-form(:inline="true")
         el-form-item.el-form-item-search
@@ -23,11 +24,14 @@
         el-table-column(label="备注")
           template(slot-scope="scope")
             div {{scope.row.remark}}
+        el-table-column(label="考试班级")
+          template(slot-scope="scope")
+            div {{scope.row.examination_item_count}}
         el-table-column(label="操作", width="300")
           template(slot-scope="scope")
-            el-button(type="primary", plain, size="mini", @click="handleEdit(scope.row)") 编 辑
+            el-button(type="primary", plain, size="mini", :disabled="disabledEdit(scope.row)", @click="handleEdit(scope.row)") 编 辑
             el-button(type="primary", plain, size="mini", @click="handleCurriculumEdit(scope.row)") 编辑班级
-            el-button(type="danger", plain, size="mini", :disabled="disabledClassDelete(scope.row)" @click="handleDelete(scope.row)") 删 除
+            el-button(type="danger", plain, size="mini", :disabled="disabledDelete(scope.row)", @click="handleDelete(scope.row)") 删 除
     save-dialog(ref="dlgSave", @callback="handlerSearch")
 </template>
 
@@ -80,8 +84,11 @@ export default {
       this.queryParams.name = ''
       this.queryChange(this.queryParams)
     },
-    disabledClassDelete (row) {
-      return false
+    disabledEdit (row) {
+      return row.start_time <= new Date().getTime()
+    },
+    disabledDelete (row) {
+      return row.examination_item_count > 0
     },
     handleAdd () {
       this.$refs.dlgSave && this.$refs.dlgSave.show()

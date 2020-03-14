@@ -2,12 +2,12 @@
   div
     el-form(ref="form", :model="formData", labelWidth="150px")
       el-form-item(label="课程：")
-        el-button.button(type="primary", size="mini", plain, @click="handleAddCurriculum") 选 择
+        el-button.button(type="primary", size="mini", plain, @click="handleAddCurriculum", v-if="canEdit") 选 择
         el-table.table(:data="dataCurriculumNames", border, :show-header="false")
           el-table-column
             template(slot-scope="scope")
               div {{scope.row}}
-      el-form-item
+      el-form-item(v-if="canEdit")
         el-button(type="primary", :loading="loading", @click="handleSave") 保 存
     choose-examination-curriculum-dialog(ref="dlgChooseCurriculum", @submit="handleChooseCurriculum")
 </template>
@@ -43,6 +43,10 @@ export default {
     examinationClassId: {
       type: Number,
       default: 0
+    },
+    canEdit: {
+      type: Boolean,
+      default: true
     }
   },
   watch: {
