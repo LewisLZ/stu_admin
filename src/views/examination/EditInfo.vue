@@ -9,19 +9,19 @@
               div {{scope.row}}
       el-form-item
         el-button(type="primary", :loading="loading", @click="handleSave") 保 存
-    choose-curriculum-dialog(ref="dlgChooseCurriculum", @submit="handleChooseCurriculum")
+    choose-examination-curriculum-dialog(ref="dlgChooseCurriculum", @submit="handleChooseCurriculum")
 </template>
 
 <script>
 
-import ChooseCurriculumDialog from '../../components/choose-dialog/ChooseCurriculumDialog'
-import { listCurriculumNameByIds } from '../../api/curriculum'
-import { createClassCurriculum } from '../../api/class'
+import ChooseExaminationCurriculumDialog from '../../components/choose-dialog/ChooseExaminationCurriculumDialog'
+import { listCurriculumNameByClassCurriculumIds } from '../../api/curriculum'
+import { createExaminationClassCurriculum } from '../../api/examination'
 
 export default {
   name: 'EditInfo',
   components: {
-    ChooseCurriculumDialog
+    ChooseExaminationCurriculumDialog
   },
   props: {
     curriculumIds: {
@@ -36,7 +36,11 @@ export default {
         return []
       }
     },
-    ccYearId: {
+    classId: {
+      type: Number,
+      default: 0
+    },
+    examinationClassId: {
       type: Number,
       default: 0
     }
@@ -44,7 +48,7 @@ export default {
   watch: {
     'curriculumIds': {
       handler (val, old) {
-        this.formData.curriculum_ids = this.R.clone(val || [])
+        this.formData.class_curriculum_ids = this.R.clone(val || [])
       },
       deep: true,
       immediate: true
@@ -61,18 +65,18 @@ export default {
     return {
       loading: false,
       formData: {
-        curriculum_ids: []
+        class_curriculum_ids: []
       },
       dataCurriculumNames: []
     }
   },
   methods: {
     handleAddCurriculum () {
-      this.$refs.dlgChooseCurriculum && this.$refs.dlgChooseCurriculum.show(this.ccYearId, this.formData.curriculum_ids || [])
+      this.$refs.dlgChooseCurriculum && this.$refs.dlgChooseCurriculum.show(this.classId, this.formData.class_curriculum_ids || [])
     },
-    async handleChooseCurriculum (ids) {
-      this.formData.curriculum_ids = ids
-      const res = await listCurriculumNameByIds(ids)
+    async handleChooseCurriculum (classCurriculumIds) {
+      this.formData.class_curriculum_ids = classCurriculumIds
+      const res = await listCurriculumNameByClassCurriculumIds(classCurriculumIds)
       this.dataCurriculumNames = res.data.data
     },
     handleSave () {
@@ -80,7 +84,7 @@ export default {
         if (valid) {
           this.loading = true
           try {
-            await createClassCurriculum({ cc_year_id: this.ccYearId, curriculum_ids: this.formData.curriculum_ids })
+            await createExaminationClassCurriculum({ examination_class_id: this.examinationClassId, class_curriculum_ids: this.formData.class_curriculum_ids })
             this.$message({
               type: 'success',
               message: '保存成功'

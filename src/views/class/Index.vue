@@ -32,6 +32,9 @@
         el-table-column(label="学生")
           template(slot-scope="scope")
             el-button(type="text", :disabled="showStudentCount(scope.row)===0", @click="handleShowStudent(scope.row)") {{showStudentCount(scope.row)}}
+        el-table-column(label="课程")
+          template(slot-scope="scope")
+            div {{scope.row.class_curriculum_year_count}}
         el-table-column(label="操作", width="300")
           template(slot-scope="scope")
             el-button(type="primary", plain, size="mini", @click="handleEdit(scope.row)") 编 辑
@@ -98,7 +101,7 @@ export default {
       return `${row.year}年-${convertAttrName(row.pos, allPos)}`
     },
     disabledClassDelete (row) {
-      return this.showTeacherCount(row) > 0 || this.showStudentCount(row) > 0
+      return this.showTeacherCount(row) > 0 || this.showStudentCount(row) > 0 || row.class_curriculum_year_count > 0
     },
     handleAdd () {
       this.$refs.dlgSave && this.$refs.dlgSave.show()

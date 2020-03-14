@@ -1,11 +1,12 @@
 <template lang="pug">
   el-dialog(:visible.sync="dialogVisible", :title="titleName", width="400px", @close="closeCallback", v-loading="loading")
     el-form(ref="form", :model="formData", :rules="formRules", labelPosition="top")
-      el-form-item.top-el-form-fix(label="名称", prop="name")
-        el-input(v-model="formData.name")
-      el-form-item(label="学年", prop="school_year_id")
-        el-select(v-model="formData.school_year_id", placeholder="请选择", clearable, :disabled="isEdit")
-          el-option(v-for="item in schoolYears", :key="item.id", :label="showSchoolYear(item)", :value="item.id")
+      el-form-item.top-el-form-fix(label="年份：", prop="year", :required="true")
+        el-date-picker(v-model="formData.year", type="year", placeholder="请选择", value-format="timestamp")
+      el-form-item(label="月份：", prop="pos", :required="true")
+        el-radio-group(v-model="formData.pos")
+          el-radio(:label="1") 上半年
+          el-radio(:label="2") 下半年
     div.dialog-footer(slot="footer")
       el-button(type="primary", @click="handleSubmit") 确定
       el-button(@click="dialogVisible = false") 取消
@@ -13,30 +14,47 @@
 
 <script>
 
-import { createClass, updateClass } from '../../api/class'
-import { listSchoolYear } from '../../api/school_year'
-import { convertAttrName } from '../../service/common'
-import { allPos } from '../../service/school_year'
+import { createClassCurriculumYear, updateClassCurriculumYear } from '../../api/class'
 
 export default {
   data () {
+    const yearValidator = (rule, value, callback) => {
+      if (value < this.classInfo.year_tmp) {
+        callback(new Error('年份不能小于班级'))
+        return
+      }
+      callback()
+    }
+    const posValidator = (rule, value, callback) => {
+      if (this.formData.year === this.classInfo.year_tmp) {
+        if (value < this.classInfo.pos) {
+          callback(new Error('年份相同月份不能小于班级'))
+          return
+        }
+      }
+      callback()
+    }
     return {
       loading: false,
       dialogVisible: false,
       formData: {
         id: 0,
-        name: '',
-        school_year_id: ''
+        class_id: 0,
+        year: '',
+        pos: 1
       },
       formRules: {
-        name: [
-          { required: true, message: '姓名不能为空', trigger: 'blur' }
+        year: [
+          { required: true, message: '年份不能为空', trigger: 'blur' },
+          { validator: yearValidator, trigger: 'blur' }
         ],
-        school_year_id: [
-          { required: true, message: '学年不能为空', trigger: 'blur' }
+        pos: [
+          { required: true, message: '不能为空', trigger: 'blur' },
+          { validator: posValidator, trigger: 'blur' }
         ]
       },
-      schoolYears: []
+      schoolYears: [],
+      classInfo: {}
     }
   },
   computed: {
@@ -51,30 +69,22 @@ export default {
     }
   },
   methods: {
-    show (data) {
+    show (data, classInfo) {
+      this.classInfo = classInfo
       this.dialogVisible = true
       if (data) {
         this.formData = data
       } else {
         this.formData = {
           id: 0,
-          name: '',
-          school_year_id: ''
+          class_id: 0,
+          year: '',
+          pos: 1
         }
       }
-      this.initData()
     },
     hide () {
       this.dialogVisible = false
-    },
-    async initData () {
-      this.loading = true
-      const res = await listSchoolYear({ page: 1, limit: 10000 })
-      this.schoolYears = res.data.data
-      this.loading = false
-    },
-    showSchoolYear (item) {
-      return `${item.year}年-${convertAttrName(item.pos, allPos)}`
     },
     closeCallback () {
       this.$refs.form && this.$refs.form.resetFields()
@@ -85,9 +95,9 @@ export default {
           this.loading = true
           try {
             if (this.isEdit) {
-              await updateClass(this.formData)
+              await updateClassCurriculumYear(this.formData)
             } else {
-              await createClass(this.formData)
+              await createClassCurriculumYear(this.formData)
             }
             this.$message({
               type: 'success',

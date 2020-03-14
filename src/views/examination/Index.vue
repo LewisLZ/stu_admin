@@ -90,7 +90,12 @@ export default {
       this.$refs.dlgSave && this.$refs.dlgSave.show(row)
     },
     handleCurriculumEdit (row) {
-      //
+      this.$router.push({
+        name: 'ExaminationEdit',
+        params: {
+          id: row.id
+        }
+      })
     },
     handleDelete (row) {
       this.$confirm('确定删除吗？', '提示', {

@@ -177,6 +177,24 @@ const router = new Router({
             title: '考试管理',
             showInSide: true
           }
+        },
+        {
+          path: '/examination/edit/:id',
+          name: 'ExaminationEdit',
+          component: () => import('src/views/examination/Edit.vue'),
+          meta: {
+            title: '编辑',
+            showInSide: false,
+            breadcrumbItems: [
+              {
+                text: '考试管理',
+                to: { name: 'Examination' }
+              },
+              {
+                text: '编辑'
+              }
+            ]
+          }
         }
       ]
     },

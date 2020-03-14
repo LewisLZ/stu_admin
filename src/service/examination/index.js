@@ -25,3 +25,15 @@ export const covertExaminationListForm = R.curry((data) => {
     return val
   })(data)
 })
+
+export const covertExaminationClassCreateForm = R.curry((data) => {
+  return R.mapObjIndexed((val, key) => {
+    if (key === 'examination_id' || key === 'class_id') {
+      if (val === '') {
+        return 0
+      }
+      return parseInt(val)
+    }
+    return val
+  })(data)
+})

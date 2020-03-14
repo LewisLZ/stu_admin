@@ -93,8 +93,5 @@ export default {
 </script>
 
 <style scoped>
-  .warning {
-    color: #F32B2B;
-    margin-bottom: 20px;
-  }
+
 </style>
