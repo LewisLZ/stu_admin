@@ -8,12 +8,6 @@
         el-table-column(label="成绩")
           template(slot-scope="scope")
             div(style="color:#f32b2b") {{scope.row.score | score}}
-        el-table-column(label="授课教师")
-          template(slot-scope="scope")
-            div {{scope.row.curriculum_teacher_name}}
-        el-table-column(label="班级教师")
-          template(slot-scope="scope")
-            div {{scope.row.class_teacher_name}}
         el-table-column(label="最后更新时间", width="160px")
           template(slot-scope="scope")
             div {{scope.row.score_mt | datetime}}
