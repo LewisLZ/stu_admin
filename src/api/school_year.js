@@ -19,8 +19,3 @@ export const listSchoolYear = (data) => {
 export const deleteSchoolYear = (params) => {
   return Axios.delete('/sys/schoolyear/delete', { params })
 }
-
-export const listSchoolYearNameByIds = (cids) => {
-  const params = { ids: cids }
-  return Axios.get('/sys/schoolyear/listNameByIds', { params })
-}
