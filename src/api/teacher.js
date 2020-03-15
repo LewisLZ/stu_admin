@@ -6,7 +6,7 @@ export const createTeacher = (params) => {
 }
 
 export const updateTeacher = (id, params) => {
-  params.id = id
+  params.id = parseInt(id)
   return Axios.post('/sys/teacher/update', params)
 }
 

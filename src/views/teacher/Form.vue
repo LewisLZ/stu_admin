@@ -26,7 +26,7 @@
 import { listCurriculumNameByIds } from '../../api/curriculum'
 import { createTeacher, getTeacher, updateTeacher } from '../../api/teacher'
 import ChooseClassDialog from '../../components/choose-dialog/ChooseClassDialog'
-import ChooseCurriculumDialog from '../../components/choose-dialog/ChooseCurriculumDialog'
+import ChooseCurriculumDialog from './ChooseCurriculumDialog'
 import { listClassNameByIds } from '../../api/class'
 
 export default {

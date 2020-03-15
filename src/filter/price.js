@@ -1,11 +1,11 @@
 import { convertFenToYuan } from 'src/util/moneyUtil'
 
-export const commonPrice = (val, showSymbol = true) => {
+export const commonScore = (val) => {
   if (val) {
     const lessZero = val < 0
-    return `${lessZero ? '- ' : ''} ${showSymbol ? '¥' : ''}${convertFenToYuan(Math.abs(val))}`
+    return `${lessZero ? '- ' : ''}${convertFenToYuan(Math.abs(val))}`
   } else {
-    return `${showSymbol ? '¥' : ''}0`
+    return `0`
   }
 }
 

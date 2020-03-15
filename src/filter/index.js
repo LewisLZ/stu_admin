@@ -1,5 +1,5 @@
 import { date, datetime, minutetime, monthtime } from './datetime'
-import { commonPrice, friendlyPrice, commaPrice } from './price'
+import { commonScore, friendlyPrice, commaPrice } from './price'
 import { commonVolume } from './volume'
 import { commonWeight } from './weight'
 import { sales } from './sales'
@@ -8,7 +8,7 @@ export default {}.install = function (Vue, options) {
   let filters = [
     { name: 'date', filter: date },
     { name: 'datetime', filter: datetime },
-    { name: 'price', filter: commonPrice },
+    { name: 'score', filter: commonScore },
     { name: 'friendlyPrice', filter: friendlyPrice },
     { name: 'commaPrice', filter: commaPrice },
     { name: 'monthtime', filter: monthtime },

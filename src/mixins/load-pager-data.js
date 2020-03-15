@@ -205,8 +205,8 @@ export default {
       }
       let routeQuery = { ...this.$route.query }
       routeQuery.timestamp = new Date().getTime()
-      routeQuery.sort = sortInfo.prop ? sortInfo.prop : ''
-      routeQuery.order = sortInfo.prop ? (sortInfo.order === 'ascending' ? 'asc' : 'desc') : ''
+      routeQuery.order = sortInfo.order ? (sortInfo.order === 'ascending' ? 'asc' : 'desc') : ''
+      routeQuery.sort = routeQuery.order && sortInfo.prop ? sortInfo.prop : ''
       routeQuery.page = keepPage ? this.queryPager.page : 1
       this.$router.replace({
         path: this.$route.path,

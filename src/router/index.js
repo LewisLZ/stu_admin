@@ -10,6 +10,11 @@ const homeGroups = [
     name: 'ClassManagement',
     title: '班级管理',
     path: '/'
+  },
+  {
+    name: 'AchManagement',
+    title: '成绩管理',
+    path: '/'
   }
 ]
 
@@ -194,6 +199,66 @@ const router = new Router({
                 text: '编辑'
               }
             ]
+          }
+        },
+        {
+          path: 'achievement',
+          name: 'Achievement',
+          component: () => import('src/views/achievement/Index.vue'),
+          meta: {
+            group: 'AchManagement',
+            title: '成绩录入',
+            showInSide: true
+          }
+        },
+        {
+          path: '/achievement/edit/:id',
+          name: 'AchievementEdit',
+          component: () => import('src/views/achievement/Edit.vue'),
+          meta: {
+            title: '编辑',
+            showInSide: false,
+            breadcrumbItems: [
+              {
+                text: '成绩录入',
+                to: { name: 'Achievement' }
+              },
+              {
+                text: '编辑'
+              }
+            ]
+          }
+        },
+        {
+          path: '/achievement/edit/:id/score/:ecid',
+          name: 'AchievementScoreEdit',
+          component: () => import('src/views/achievement/EditSource.vue'),
+          meta: {
+            title: '成绩',
+            showInSide: false,
+            breadcrumbItems: [
+              {
+                text: '成绩录入',
+                to: { name: 'Achievement' }
+              },
+              {
+                text: '编辑',
+                to: { name: 'AchievementEdit' }
+              },
+              {
+                text: '成绩'
+              }
+            ]
+          }
+        },
+        {
+          path: 'score',
+          name: 'Score',
+          component: () => import('src/views/score/Index.vue'),
+          meta: {
+            group: 'AchManagement',
+            title: '成绩查询',
+            showInSide: true
           }
         }
       ]
