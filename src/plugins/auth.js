@@ -8,8 +8,11 @@ const plugin = {
         $Uid () {
           return this.$store.getters.uc ? this.$store.getters.uc.id : ''
         },
-        $RolesTps () {
-          return this.$store.getters.uc ? this.$store.getters.uc.roles : []
+        $isSuper () {
+          return this.$store.getters.isSuper
+        },
+        $uid () {
+          return this.$store.getters.uc.id
         }
       }
     })

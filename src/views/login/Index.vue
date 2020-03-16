@@ -7,8 +7,8 @@
       div.login-container
         el-form(ref="formLogin", :model="form", :rules="rules", labelPosition="left", labelWidth="0")
           div.title
-          el-form-item(prop="account")
-            el-input(type="text", placeholder="用户名", v-model="form.account", clearable)
+          el-form-item(prop="mobile")
+            el-input(type="text", placeholder="用户名", v-model="form.mobile", clearable)
           el-form-item(prop="passwd")
             el-input(placeholder="登录密码", v-model="form.passwd", show-password, clearable)
           el-form-item(style="border: none")
@@ -25,19 +25,15 @@ export default {
       loading: false,
       logoImage: logoImage,
       form: {
-        account: '',
+        mobile: '',
         passwd: ''
       },
       rules: {
-        account: [
-          {
-            required: true, trigger: 'blur', message: '请输入用户名'
-          }
+        mobile: [
+          { required: true, trigger: 'blur', message: '请输入用户名' }
         ],
         passwd: [
-          {
-            required: true, trigger: 'blur', message: '请输入登录密码'
-          }
+          { required: true, trigger: 'blur', message: '请输入登录密码' }
         ]
       }
     }

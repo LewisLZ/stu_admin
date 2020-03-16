@@ -15,7 +15,7 @@ const getters = {
     return state.me
   },
   isSuper: state => {
-    if (state.me && state.me.roles.includes(1)) {
+    if (state.me && state.me.type === 1) {
       return true
     } else {
       return false

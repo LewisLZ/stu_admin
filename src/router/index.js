@@ -260,6 +260,15 @@ const router = new Router({
             title: '成绩查询',
             showInSide: true
           }
+        },
+        {
+          path: 'admin',
+          name: 'Admin',
+          component: () => import('src/views/admin/Index.vue'),
+          meta: {
+            title: '管理员',
+            showInSide: true
+          }
         }
       ]
     },
