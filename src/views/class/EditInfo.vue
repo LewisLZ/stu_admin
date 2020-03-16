@@ -41,29 +41,13 @@ export default {
       default: 0
     }
   },
-  watch: {
-    'curriculumIds': {
-      handler (val, old) {
-        this.formData.curriculum_ids = this.R.clone(val || [])
-      },
-      deep: true,
-      immediate: true
-    },
-    'curriculumNames': {
-      handler (val, old) {
-        this.dataCurriculumNames = this.R.clone(val || [])
-      },
-      deep: true,
-      immediate: true
-    }
-  },
   data () {
     return {
       loading: false,
       formData: {
-        curriculum_ids: []
+        curriculum_ids: this.R.clone(this.curriculumIds || [])
       },
-      dataCurriculumNames: []
+      dataCurriculumNames: this.R.clone(this.curriculumNames || [])
     }
   },
   methods: {
