@@ -80,7 +80,6 @@ export default {
       titles = this.R.sort((a, b) => a.class_curriculum_id - b.class_curriculum_id)(titles || [])
       titles.push({ class_curriculum_id: 0, class_curriculum_name: '总分' })
       this.tableHeader = titles
-      console.log('==1===', titles)
 
       let students = []
       this.R.forEach(item => {
@@ -93,8 +92,6 @@ export default {
 
       students = this.R.sort((a, b) => a.student_id - b.student_id)(students || [])
 
-      console.log('==2===', students)
-
       let datas = []
 
       this.R.forEach(item => {
@@ -105,7 +102,6 @@ export default {
       })(students || [])
 
       this.dataList = datas
-      console.log('===5==', datas)
     },
     convertForm () {
       const formData = []
