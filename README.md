@@ -1,4 +1,4 @@
-# cli4
+# 学生成绩管理系统
 
 ## Project setup
 ```
@@ -7,17 +7,12 @@ npm install
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+npm run beta
 ```
 
 ### Compiles and minifies for production
 ```
 npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
 ```
 
 ### Customize configuration
